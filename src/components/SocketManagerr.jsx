@@ -2,15 +2,13 @@ import { io } from "socket.io-client";
 import { useEffect } from "react";
 import { useAtom, atom } from "jotai";
 
-// export const socket = io("http://localhost:3001");
+export const socket = io("http://localhost:3001");
 
 export const charactersAtom = atom([]);
 export const ScocketManager = () => {
   const [_characters, setCharacters] = useAtom(charactersAtom);
 
   useEffect(() => {
-    const socket = io("http://localhost:3001");
-
     const onConnect = () => {
       console.log("user connected");
     };
@@ -37,6 +35,7 @@ export const ScocketManager = () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("hello", onHello);
+      socket.off("characters", onCharacters); // Add this
     };
   }, []);
 

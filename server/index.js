@@ -39,4 +39,11 @@ io.on("connection", (socket) => {
     );
     io.emit("characters", characters);
   });
+
+  socket.on("move", (position) => {
+    console.log("Received position:", position);
+    const character = characters.find((c) => c.id === socket.id);
+    character.position = position;
+    io.emit("characters", characters);
+  });
 });
