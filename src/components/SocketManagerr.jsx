@@ -2,6 +2,8 @@ import { io } from "socket.io-client";
 import { useEffect } from "react";
 import { useAtom, atom } from "jotai";
 
+//socket setup on client side.
+
 export const socket = io("http://localhost:3001");
 
 export const charactersAtom = atom([]);
