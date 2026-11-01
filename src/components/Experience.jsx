@@ -1,13 +1,20 @@
 import { Environment, OrbitControls, useCursor } from "@react-three/drei";
 import { AnimatedWoman } from "./AnimateWoman";
-import { charactersAtom, ScocketManager, socket } from "./SocketManagerr";
+import {
+  charactersAtom,
+  mapAtom,
+  ScocketManager,
+  socket,
+} from "./SocketManagerr";
 import { useAtom } from "jotai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Three from "three";
+import { Item } from "./item";
 
 export const Experience = () => {
   const [characters] = useAtom(charactersAtom);
   const [onFloor, setOnFloor] = useState(false);
+  const [map] = useAtom(mapAtom);
   useCursor(onFloor);
 
   return (
@@ -16,6 +23,15 @@ export const Experience = () => {
       <Environment preset="sunset" />
       <ambientLight intensity={0.3} />
       <OrbitControls />
+
+      {map?.items?.map((value, index) => (
+        <Item
+          key={`${value.name}-${index}`}
+          item={value}
+          gridDivision={map.gridDivision}
+          mapSize={map.size}
+        />
+      ))}
 
       <mesh
         //Math.PI / 2 means rotate 90 degrees hai.
@@ -27,6 +43,8 @@ export const Experience = () => {
         onClick={(e) => socket.emit("move", [e.point.x, 0, e.point.z])}
         onPointerEnter={() => setOnFloor(true)}
         onPointerLeave={() => setOnFloor(false)}
+        // position-x={map?.size[0] / 2}
+        // position-z={map?.size[1] / 2}
       >
         <planeGeometry args={[10, 10]} />
         <meshStandardMaterial color="#f0f0f0" />
